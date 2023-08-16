@@ -1,0 +1,32 @@
+<script lang="ts">
+    import { Avatar } from 'flowbite-svelte';
+    import User from '$lib/classes/user';
+
+    export let userParam: any;
+    
+</script>
+
+{#if realUser}
+    <a
+        href={`/${realUser.npub}`}
+        class="border border-zinc-800/20 dark:border-zinc-100/20 p-2 rounded-md
+flex flex-row gap-4 items-center no-underline"
+    >
+        <div class="hidden md:block">
+            <Avatar src={realUser.image} size="lg" class="!m-0 object-cover" />
+        </div>
+        <div class="block md:hidden">
+            <Avatar src={realUser.image} size="md" class="!m-0 object-cover" />
+        </div>
+        <span class="text-lg md:text-xl font-medium no-underline">{realUser.displayableName()}</span
+        >
+    </a>
+{:else}
+    <div
+        class="border border-zinc-800/20 dark:border-zinc-100/20
+    p-2 rounded-md items-center no-underline
+    animate-pulse"
+    >
+        <div class="text-center">Loading...</div>
+    </div>
+{/if}

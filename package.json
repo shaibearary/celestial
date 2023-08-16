@@ -29,6 +29,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@nostr-dev-kit/ndk": "^0.8.14"
+		"@nostr-dev-kit/ndk": "^0.8.17",
+		"flowbite-svelte": "^0.43.2"
 	}
 }
