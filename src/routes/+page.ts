@@ -1,0 +1,56 @@
+import type { PageLoad } from './$types';
+import * as NostrTools from "nostr-tools";
+import ndk from '$lib/stores/ndk';
+import type {NDKFilter} from "@nostr-dev-kit/ndk";
+export const load = (async () => {
+    function beginListeningForEvents() {
+            const pool = new NostrTools.SimplePool()
+            let sub = pool.sub(
+                [ 'wss://nostr.688.org'],
+                [
+                    {
+                        //tags: [['#e', 'fd459ea06157e30cfb87f7062ee3014bc143ecda072dd92ee6ea4315a6d2df1c']]
+                        ["#e"]: initalRootIds.get("IgnitionEvent") as string,
+                        kinds: [10311]
+                    }
+                ]
+            )
+            sub.on('event', event => {
+                // if (event.kind === 1) {
+                //     enmapReply(event)
+                // }
+                if (event.kind === 10311) {
+                    console.log(event)
+                    if (event.pubkey === window.spaceman.ignition_account || event.pubkey === window.spaceman.pubkey) {
+                        //todo this should check for current pubkey || any pubkey with votepower > x
+                        state.enMapState(event)
+                        window.spaceman.Views.identityTree()
+                        // document.getElementById("content").replaceChildren()
+                        // document.getElementById("content").appendChild(renderIdentityLayout())
+                        if (window.spaceman.CurrentState.state.identity[window.spaceman.pubkey]) {
+                            if (window.spaceman.CurrentState.state.identity[window.spaceman.pubkey].Name) {
+                                if (document.getElementById("pubkey")) {
+                                    document.getElementById("pubkey").innerText = window.spaceman.CurrentState.state.identity[window.spaceman.pubkey].Name
+                                }
+                            }
+    
+                        }
+                    }
+                }
+            })
+        }
+    
+    }
+}) satisfies PageLoad;
+const initalRootIds = new Map<string, string>([
+    ["IgnitionEvent", "1bf16cac62588cfd7e3c336b8548fa49a09627f03dbf06c7a4fee27bc01972c8"],
+    ["IdentityRoot", "ae14dd661475351993f626f66df8052ed73166796e5cd893c09e4d333e170bb5"],
+    ["Merits", "9f7211ac022b500a7adeeacbe44bb84225d1bb1ee94169f8c5d8d1640a154cbc"],
+    ["MirvsRoot", "0f56599b6530f1ed1c11745b76a0d0fc29934e9a90accce1521f4dfac7a78532"],
+    ["ReplayRoot", "9ab11d92bdeffd28762374d5dfc5286e0f494d7cff5bc00b4fce177bf1115b94"],
+    ["ProblemRoot", "6439b9ff8c19b537ba5cdb7a7809f2031eb34c033229117ecfe055f608ff8842"]
+]);
+const filter: NDKFilter = { kinds: [1], ["#e"]:[initalRootIds.get("IgnitionEvent") as string] };
+
+const event = ndk.fetchEvents(filter);
+console.log(event);
