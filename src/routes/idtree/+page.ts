@@ -1,24 +1,21 @@
 import type { PageLoad } from './$types';
-import type {Kind}  from "nostr-tools";
-import {ndk} from '$lib/stores/ndk';
-import {status} from "$lib/stores/status"
-import type {NDKFilter} from "@nostr-dev-kit/ndk";
+import type { Kind } from 'nostr-tools';
+import { ndk } from '$lib/stores/ndk';
+import { status } from '$lib/stores/status';
+import type { NDKFilter } from '@nostr-dev-kit/ndk';
 
 export const load = (async () => {
+	console.log(status, 'teststatus');
 
-    console.log(status,"teststatus")
-    
-    return {a:status}
-}
-    
-    )
-    
+	return { a: status };
+}) satisfies PageLoad;
+
 // }) satisfies PageLoad;
 // async function beginListeningForEvents() {
 //     const statusKind = 10311 as Kind;
 //     // const filter: NDKFilter = { kinds: [statusKind]};
 //     const filter: NDKFilter = { kinds: [statusKind], ["#e"]:[initalRootIds.get("IgnitionEvent") as string] };
-    
+
 //     const a= await ndk.fetchEvents(filter);
 //     return a
 //     // console.log(),"??????");
