@@ -1,11 +1,16 @@
 import { browser } from '$app/environment';
-// import { db } from '$lib/interfaces/db';
+import { db } from '$lib/interfaces/db';
 import type { NDKUser } from '@nostr-dev-kit/ndk';
 import { liveQuery, type Observable } from 'dexie';
-// import { unixTimeNow } from '$lib/utils/helpers';
+import { unixTimeNow } from '$lib/utils/helpers';
 import ndkStore from '$lib/stores/ndk';
-import { get } from 'svelte/store';
-// import { truncatedBech } from '$lib/utils/helpers';
+import { get, writable, type Writable } from 'svelte/store';
+import { truncatedBech } from '$lib/utils/helpers';
+import { status } from '$lib/stores/status';
+import type { P } from 'flowbite-svelte';
+/**
+ * nostroceket identity interface
+ */
 export interface AccountInfo {
 	Account: string;
 	Name: string;
@@ -16,8 +21,9 @@ export interface AccountInfo {
 	OpReturnAddr: any;
 	Order: number;
 	PermanymEventID: string;
-    NostrProfile?: UserParams;
+    NostrProfile?: Observable<User>;
 }
+
 
 interface UserParams {
 	pubkey: string;
@@ -34,11 +40,91 @@ interface UserParams {
 	lastFetched?: number;
 	relayUrls?: string[];
 }
+interface PersonCardParams {
+    name?: string;
+    about?: string;
+    order?: number;
+    added_by?: string; //name or 1human
+    npub: string;
+    // profile: NDKUserProfile
+    // button: string;
+    avatar?: string;}
+	// console.log(p, 'sji');
+export default class PersonCard{
+	name?: string;
+	about?: string;
+	order?: number;
+	added_by?: string; //name or 1human
+	npub: string;
+	// profile: NDKUserProfile
+	// button: string;
+	avatar?: string;
+	constructor(p: PersonCardParams){
+		this.name = p.name;
+		this.about = p.about;
+		this.order = p.order;
+		this.added_by = p.added_by;
+		this.npub = p.npub;
+		this.avatar = p.avatar;
+	}
+	static get(pubkey: string, rktAccount: AccountInfo): PersonCard  {
+		// let personCard = new PersonCard({"name": rktAccount.Name, "about": user.about as string, "order": rktAccount.Order, "added_by": addBy, "npub": user.npub as string})
+		
+		const ndk = get(ndkStore);
+		const ndkUser = ndk.getUser({ hexpubkey: pubkey });
+		const npub = ndkUser.npub
+		// ndkUser.fetchProfile()
 
-/**
- * An extended version of the NDKUser class
- */
-export default class User {
+
+
+		let addBy: string;
+		if (rktAccount.UniqueSovereignBy=="1Humanityrvhus5mFWRRzuJjtAbjk2qwww"){
+			 addBy = "1Humanityrvhus5mFWRRzuJjtAbjk2qwww" 
+		}
+
+		else{
+			if (rktAccount.UniqueSovereignBy != ""){
+				addBy = status.identity[rktAccount.UniqueSovereignBy].Name as string
+			}
+			else{
+				addBy = "error"
+			}
+			//  console.log(addBy,"	dkcm" )
+		}
+		// console.log(addBy,"sdsdsdsddddddddddddd")
+		let personCard = new PersonCard({"npub":npub,"added_by": addBy,"name": rktAccount.Name, "order": rktAccount.Order})
+		const user = personCard.fetchFromNostr(pubkey)
+		// let personCard = new PersonCard({"name": rktAccount.Name, "about": user.about as string, "order": rktAccount.Order, "added_by": addBy, "npub": user.npub as string})
+		return personCard
+	
+	}
+	private  fetchFromNostr(pubkey: string): User {
+		const ndk = get(ndkStore);
+		const ndkUser = ndk.getUser({ hexpubkey: pubkey });
+		console.log(ndkUser, "	ndkUser")
+		ndkUser
+		.fetchProfile()
+		.then(() => {
+			// this.name = user.profile?.name as string;
+			// this.displayName = user.profile?.displayName as string;
+			// this.image = user.profile?.image as string;
+			// this.banner = user.profile?.banner as string;
+			this.about = ndkUser.profile?.bio as string;
+			console.log(this.about, "	about")
+			// this.nip05 = user.profile?.nip05 as string;
+			// this.lud16 = user.profile?.lud16 as string;
+			// this.about = user.profile?.about as string;
+			// this.zapService = user.profile?.zapService as string;
+		})
+
+		const user = new User({ pubkey: pubkey, npub: ndkUser.npub });
+		
+		return user
+		// user.updateProfileAndRelays(ndkUser);
+	}
+}
+	
+class User {
 	pubkey: string;
 	npub?: string;
 	name?: string;
@@ -85,8 +171,9 @@ export default class User {
 				if (!dbUser || (user && user.needsUpdate())) User.fetchFromNostr(pubkey);
 			});
 		}
+		// User.fetchFromNostr(pubkey)
 
-		return liveQuery(() => (browser ? db.users.get({ pubkey: pubkey }) : user)) as Observable<User>;
+		return liveQuery(() => ( user)) as Observable<User>;
 	}
 
 	/**
@@ -97,6 +184,7 @@ export default class User {
 	static fetchFromNostr(pubkey: string): void {
 		const ndk = get(ndkStore);
 		const ndkUser = ndk.getUser({ hexpubkey: pubkey });
+		
 		const user = new User({ pubkey: pubkey, npub: ndkUser.npub });
 		user.updateProfileAndRelays(ndkUser);
 	}
@@ -144,8 +232,8 @@ export default class User {
 				this.lastFetched = unixTimeNow();
 				this.save();
 			});
+			
 	}
-
 	public async save(): Promise<User | null> {
 		try {
 			if (browser) await db.users.put(this);
@@ -175,3 +263,7 @@ export default class User {
 		}
 	}
 }
+
+/**
+ * An extended version of the NDKUser class
+ */

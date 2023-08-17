@@ -5,7 +5,7 @@ import { status } from '$lib/stores/status';
 import type { NDKFilter } from '@nostr-dev-kit/ndk';
 
 export const load = (async () => {
-	console.log(status, 'teststatus');
+	// console.log(status, 'teststatus');
 
 	return { a: status };
 }) satisfies PageLoad;

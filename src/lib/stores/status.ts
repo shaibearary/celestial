@@ -3,8 +3,17 @@ import type { Kind } from 'nostr-tools';
 import { writable } from 'svelte/store';
 import { ndk } from '$lib/stores/ndk';
 import type { NDKFilter } from '@nostr-dev-kit/ndk';
-// import {AccountInfo} from "$lib/classes/user";
 
+// import {AccountInfo} from "$lib/classes/user";
+interface Status {
+	// Define the expected properties and their types here
+	// For example:
+	identity:  Map<string, string> | null;
+	shares: number | null;
+	problems: Map<string, string>|	null;
+	merits: Map<string, string>	|	null;
+	// ...
+  }
 const initalRootIds = new Map<string, string>([
 	['IgnitionEvent', '1bf16cac62588cfd7e3c336b8548fa49a09627f03dbf06c7a4fee27bc01972c8'],
 	['IdentityRoot', 'ae14dd661475351993f626f66df8052ed73166796e5cd893c09e4d333e170bb5'],
@@ -16,7 +25,7 @@ const initalRootIds = new Map<string, string>([
 ]);
 export const status = await beginListeningForEvents();
 // data: JSON.stringify(decodedAddr.data)
-console.log(status, '??????');
+// console.log(status, '??????');
 
 const statusStore = writable(status);
 
@@ -31,7 +40,7 @@ async function beginListeningForEvents() {
 	const a = await ndk.fetchEvents(filter);
 	const status = a.values().next().value.content;
 
-	return JSON.parse(status);
+	return JSON.parse(status) as Status;
 	// console.log(),"??????");
 	// return event
 }
