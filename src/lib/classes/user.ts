@@ -7,7 +7,7 @@ import ndkStore from '$lib/stores/ndk';
 import { get, writable, type Writable } from 'svelte/store';
 import { truncatedBech } from '$lib/utils/helpers';
 import { status } from '$lib/stores/status';
-import type { P } from 'flowbite-svelte';
+
 /**
  * nostroceket identity interface
  */
@@ -67,7 +67,7 @@ export default class PersonCard{
 		this.npub = p.npub;
 		this.avatar = p.avatar;
 	}
-	static get(pubkey: string, rktAccount: AccountInfo): PersonCard  {
+	static async get(pubkey: string, rktAccount: AccountInfo): Promise<PersonCard> {
 		// let personCard = new PersonCard({"name": rktAccount.Name, "about": user.about as string, "order": rktAccount.Order, "added_by": addBy, "npub": user.npub as string})
 		
 		const ndk = get(ndkStore);
@@ -93,37 +93,28 @@ export default class PersonCard{
 		}
 		// console.log(addBy,"sdsdsdsddddddddddddd")
 		let personCard = new PersonCard({"npub":npub,"added_by": addBy,"name": rktAccount.Name, "order": rktAccount.Order})
-		const user = personCard.fetchFromNostr(pubkey)
+		 return personCard.fetchFromNostr(pubkey)
 		// let personCard = new PersonCard({"name": rktAccount.Name, "about": user.about as string, "order": rktAccount.Order, "added_by": addBy, "npub": user.npub as string})
-		return personCard
+		
 	
 	}
-	private  fetchFromNostr(pubkey: string): User {
+	private  fetchFromNostr(pubkey: string): Promise<this> {
 		const ndk = get(ndkStore);
 		const ndkUser = ndk.getUser({ hexpubkey: pubkey });
-		console.log(ndkUser, "	ndkUser")
-		ndkUser
-		.fetchProfile()
-		.then(() => {
-			// this.name = user.profile?.name as string;
-			// this.displayName = user.profile?.displayName as string;
-			// this.image = user.profile?.image as string;
-			// this.banner = user.profile?.banner as string;
-			this.about = ndkUser.profile?.bio as string;
-			console.log(this.about, "	about")
-			// this.nip05 = user.profile?.nip05 as string;
-			// this.lud16 = user.profile?.lud16 as string;
-			// this.about = user.profile?.about as string;
-			// this.zapService = user.profile?.zapService as string;
+		return new Promise<this>((resolve, reject) => {
+			ndkUser
+				.fetchProfile()
+				.then(() => {
+					this.about = ndkUser.profile?.bio as string;
+					const user = new User({ pubkey: pubkey, npub: ndkUser.npub });
+					resolve(this);
+				})
+				.catch((error) => {
+					reject(error);
+				});
 		})
-
-		const user = new User({ pubkey: pubkey, npub: ndkUser.npub });
-		
-		return user
-		// user.updateProfileAndRelays(ndkUser);
-	}
-}
-	
+	};
+}	
 class User {
 	pubkey: string;
 	npub?: string;
@@ -264,6 +255,5 @@ class User {
 	}
 }
 
-/**
- * An extended version of the NDKUser class
- */
+
+	

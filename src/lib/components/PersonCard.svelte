@@ -4,6 +4,7 @@
     import type { AccountInfo } from '$lib/classes/user';
     import ndk from '$lib/stores/ndk';
 	import type { NDKEvent, NDKUser, NDKUserProfile } from '@nostr-dev-kit/ndk';
+	// import { loadConfigFromFile } from 'vite';
     
 	export let rocketAccount: AccountInfo;
    
@@ -12,13 +13,14 @@
 
     const personCard =PersonCard.get(hexPubKey,rocketAccount);
 
-    const realCard = personCard
+    // const realCard = personCard
 
 </script>
 
 {#if true}
+{#await personCard}
 
-
+{:then realCard}
 <div class="person" id="lnproxy">
     <a href="https://snort.social/p/"
         >{realCard.name} {"["+realCard.npub.substring(0, 10) + "]"}</a
@@ -32,7 +34,11 @@
         >Add to Maintainer Tree</button
     >
 </div>
-	
+{:catch error}	
+    <div class="border border-red-600 p-2 rounded-md items-center no-underline">
+        <div class="text-center">Error: {error.message}</div>
+    </div>
+{/await}
 	
 {:else}
 	<div
