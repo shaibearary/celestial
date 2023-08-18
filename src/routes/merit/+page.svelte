@@ -14,12 +14,12 @@
 
 	// Interface created from the any type
 	// Converting the any type to the interface
-	let personData:Record<string, AccountInfo> = data.a.identity as Record<string, AccountInfo>;
+	let personData: Record<string, AccountInfo> = data.a.identity as Record<string, AccountInfo>;
 
-	const sortedAccounts: AccountInfo[] = Object.entries(personData).sort(([, a], [, b]) => a.Order - b.Order)
-  .map(([, account]) => account);
-	console.log(sortedAccounts,"hererere");
-
+	const sortedAccounts: AccountInfo[] = Object.entries(personData)
+		.sort(([, a], [, b]) => a.Order - b.Order)
+		.map(([, account]) => account);
+	console.log(sortedAccounts, 'hererere');
 </script>
 
 <svelte:head>
@@ -31,12 +31,10 @@
 	/>
 </svelte:head>
 
-
-	<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-		<!-- {#key personData} -->
-		{#each sortedAccounts as rocketAccount}
-			<PersonCard {rocketAccount} />	
-		{/each}
-		<!-- {/key} -->
-	</div>
-
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+	<!-- {#key personData} -->
+	{#each sortedAccounts as rocketAccount}
+		<PersonCard {rocketAccount} />
+	{/each}
+	<!-- {/key} -->
+</div>

@@ -21,9 +21,8 @@ export interface AccountInfo {
 	OpReturnAddr: any;
 	Order: number;
 	PermanymEventID: string;
-    NostrProfile?: Observable<User>;
+	NostrProfile?: Observable<User>;
 }
-
 
 interface UserParams {
 	pubkey: string;
@@ -41,16 +40,6 @@ interface UserParams {
 	relayUrls?: string[];
 }
 interface PersonCardParams {
-    name?: string;
-    about?: string;
-    order?: number;
-    added_by?: string; //name or 1human
-    npub: string;
-    // profile: NDKUserProfile
-    // button: string;
-    avatar?: string;}
-	// console.log(p, 'sji');
-export default class PersonCard{
 	name?: string;
 	about?: string;
 	order?: number;
@@ -59,7 +48,18 @@ export default class PersonCard{
 	// profile: NDKUserProfile
 	// button: string;
 	avatar?: string;
-	constructor(p: PersonCardParams){
+}
+// console.log(p, 'sji');
+export default class PersonCard {
+	name?: string;
+	about?: string;
+	order?: number;
+	added_by?: string; //name or 1human
+	npub: string;
+	// profile: NDKUserProfile
+	// button: string;
+	avatar?: string;
+	constructor(p: PersonCardParams) {
 		this.name = p.name;
 		this.about = p.about;
 		this.order = p.order;
@@ -69,36 +69,34 @@ export default class PersonCard{
 	}
 	static async get(pubkey: string, rktAccount: AccountInfo): Promise<PersonCard> {
 		// let personCard = new PersonCard({"name": rktAccount.Name, "about": user.about as string, "order": rktAccount.Order, "added_by": addBy, "npub": user.npub as string})
-		
+
 		const ndk = get(ndkStore);
 		const ndkUser = ndk.getUser({ hexpubkey: pubkey });
-		const npub = ndkUser.npub
+		const npub = ndkUser.npub;
 		// ndkUser.fetchProfile()
 
-
-
 		let addBy: string;
-		if (rktAccount.UniqueSovereignBy=="1Humanityrvhus5mFWRRzuJjtAbjk2qwww"){
-			 addBy = "1Humanityrvhus5mFWRRzuJjtAbjk2qwww" 
-		}
-
-		else{
-			if (rktAccount.UniqueSovereignBy != ""){
-				addBy = status.identity[rktAccount.UniqueSovereignBy].Name as string
-			}
-			else{
-				addBy = "error"
+		if (rktAccount.UniqueSovereignBy == '1Humanityrvhus5mFWRRzuJjtAbjk2qwww') {
+			addBy = '1Humanityrvhus5mFWRRzuJjtAbjk2qwww';
+		} else {
+			if (rktAccount.UniqueSovereignBy != '') {
+				addBy = status.identity[rktAccount.UniqueSovereignBy].Name as string;
+			} else {
+				addBy = 'error';
 			}
 			//  console.log(addBy,"	dkcm" )
 		}
 		// console.log(addBy,"sdsdsdsddddddddddddd")
-		let personCard = new PersonCard({"npub":npub,"added_by": addBy,"name": rktAccount.Name, "order": rktAccount.Order})
-		 return personCard.fetchFromNostr(pubkey)
+		let personCard = new PersonCard({
+			npub: npub,
+			added_by: addBy,
+			name: rktAccount.Name,
+			order: rktAccount.Order
+		});
+		return personCard.fetchFromNostr(pubkey);
 		// let personCard = new PersonCard({"name": rktAccount.Name, "about": user.about as string, "order": rktAccount.Order, "added_by": addBy, "npub": user.npub as string})
-		
-	
 	}
-	private  fetchFromNostr(pubkey: string): Promise<this> {
+	private fetchFromNostr(pubkey: string): Promise<this> {
 		const ndk = get(ndkStore);
 		const ndkUser = ndk.getUser({ hexpubkey: pubkey });
 		return new Promise<this>((resolve, reject) => {
@@ -112,9 +110,9 @@ export default class PersonCard{
 				.catch((error) => {
 					reject(error);
 				});
-		})
-	};
-}	
+		});
+	}
+}
 class User {
 	pubkey: string;
 	npub?: string;
@@ -164,7 +162,7 @@ class User {
 		}
 		// User.fetchFromNostr(pubkey)
 
-		return liveQuery(() => ( user)) as Observable<User>;
+		return liveQuery(() => user) as Observable<User>;
 	}
 
 	/**
@@ -175,7 +173,7 @@ class User {
 	static fetchFromNostr(pubkey: string): void {
 		const ndk = get(ndkStore);
 		const ndkUser = ndk.getUser({ hexpubkey: pubkey });
-		
+
 		const user = new User({ pubkey: pubkey, npub: ndkUser.npub });
 		user.updateProfileAndRelays(ndkUser);
 	}
@@ -223,7 +221,6 @@ class User {
 				this.lastFetched = unixTimeNow();
 				this.save();
 			});
-			
 	}
 	public async save(): Promise<User | null> {
 		try {
@@ -254,6 +251,3 @@ class User {
 		}
 	}
 }
-
-
-	
