@@ -1,3 +1,4 @@
+import { status } from '$lib/stores/status';
 import { nip19 } from 'nostr-tools';
 
 export function unixTimeNow() {
@@ -35,4 +36,11 @@ export function pointerForList(list: App.List) {
 		default:
 			break;
 	}
+}
+
+export function getIdentityByAccount(account: string) {
+	if (status.identity) {
+		const identities = new Map(Object.entries(status.identity));
+		return identities.get(account)?.Name;
+	} else return null;
 }

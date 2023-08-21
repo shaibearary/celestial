@@ -14,7 +14,7 @@
 
 	// Interface created from the any type
 	// Converting the any type to the interface
-	let personData: Record<string, AccountInfo> = data.a.identity as Record<string, AccountInfo>;
+	let personData: Map<string, AccountInfo> = $status.identity as Map<string, AccountInfo>;
 
 	const sortedAccounts: AccountInfo[] = Object.entries(personData)
 		.sort(([, a], [, b]) => a.Order - b.Order)
