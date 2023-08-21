@@ -10,10 +10,7 @@
 	// import List from '$lib/classes/list';
 
 	export let data: PageData;
-	// $ndk.fetchEvents({kinds:[1]});
 
-	// Interface created from the any type
-	// Converting the any type to the interface
 	let personData: Record<string, AccountInfo> = data.a.identity as Record<string, AccountInfo>;
 
 	const sortedAccounts: AccountInfo[] = Object.entries(personData)

@@ -35,6 +35,7 @@ export interface Merit {
 	LeadTimeUnlockedMerits: number;
 	TotalMerits: number;
 	Requests: Request[];
+	OpReturnAddresses?: string;
 }
 
 export interface MeritInfo {
