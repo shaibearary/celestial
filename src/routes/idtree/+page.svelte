@@ -19,7 +19,6 @@
 	const sortedAccounts: AccountInfo[] = Object.entries(personData)
 		.sort(([, a], [, b]) => a.Order - b.Order)
 		.map(([, account]) => account);
-	console.log(sortedAccounts, 'hererere');
 </script>
 
 <svelte:head>

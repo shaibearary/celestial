@@ -10,7 +10,7 @@
 
 	export let rocketID: string;
 	if ($status.merits) {
-		const merits = $status.merits.get(rocketID);
+	 const merits = $status.merits.get(rocketID);
 	}
 
 	// const hexPubKey = rocketAccount.Account;
