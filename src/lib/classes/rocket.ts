@@ -8,7 +8,7 @@ export interface RocketInfo {
     Maintainers: string[];
   }
   
-  interface Product {
+  export interface Product {
     UID: string;
     RocketID: string;
     Amount: number;

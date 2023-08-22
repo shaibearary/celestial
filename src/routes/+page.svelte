@@ -5,6 +5,7 @@
 	// import { zapInvoiceFromEvent } from '@nostr-dev-kit/ndk';
 	// import ndk from '$lib/stores/ndk';
 	// // import List from '$lib/classes/list';
+	import { status } from "$lib/stores/status";
 
 	// export let data: PageData;
 	// console.log(data,"》《");

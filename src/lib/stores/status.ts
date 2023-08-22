@@ -1,7 +1,7 @@
 // import type { PageLoad } from './$types';
 import type { Kind } from 'nostr-tools';
 import { writable } from 'svelte/store';
-import { ndk } from '$lib/stores/ndk';
+import  {ndk}  from '$lib/stores/ndk';
 import type { NDKFilter } from '@nostr-dev-kit/ndk';
 import type { AccountInfo } from '$lib/classes/user';
 import type { RocketInfo } from '$lib/classes/rocket';
@@ -1517,8 +1517,8 @@ const initalRootIds = new Map<string, string>([
 	['ignition_account', '546b4d7f86fe2c1fcc7eb10bf96c2eaef1daa26c67dad348ff0e9c853ffe8882']
 ]);
 export const status = await beginListeningForEvents();
-// data: JSON.stringify(decodedAddr.data)
-// console.log(status, '??????');
+
+
 
 const statusStore = writable(status);
 
@@ -1532,16 +1532,14 @@ async function beginListeningForEvents() {
 			kinds: [statusKind],
 			['#e']: [initalRootIds.get('IgnitionEvent') as string]
 		};
+		
 		const a = await ndk.fetchEvents(filter);
 		let status = a.values().next().value.content;
 		statusResult = JSON.parse(status);
+		console.log('success')
 	} catch (e) {
-		// console.log(status, 'sss11');}
 		statusResult = statusfake;
+		console.log('fail')
 	}
-
 	return statusResult;
-
-	// console.log(),"??????");
-	// return event
 }
