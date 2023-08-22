@@ -1,5 +1,9 @@
 import { status } from '$lib/stores/status';
+import { NDKEvent, NDKNip07Signer } from '@nostr-dev-kit/ndk';
 import { nip19 } from 'nostr-tools';
+import { fetchJson } from 'fetch-json';
+import ndkStore from '$lib/stores/ndk';
+import { get } from 'svelte/store';
 
 export function unixTimeNow() {
 	return Math.floor(new Date().getTime() / 1000);
@@ -43,4 +47,30 @@ export function getIdentityByAccount(account: string) {
 		const identities = new Map(Object.entries(status.identity));
 		return identities.get(account)?.Name;
 	} else return null;
+}
+
+export async function PayForProduct(lud06, pubkey, amount, callback, productID) {
+	return new Promise((resolve) => {
+		//get the LUD06 from the payments object
+		const ndk = get(ndkStore);
+		let zapRequest = new NDKEvent(ndk);
+		zapRequest.kind = 9734;
+		zapRequest.content = "I'm paying for a Nostrocket product";
+		zapRequest.tags = [
+			['relays', 'wss://nostr.mutinywallet.com'],
+			['amount', (amount * 1000).toString()],
+			['lnurl', lud06],
+			['p', pubkey],
+			['e', productID]
+		];
+		const signer = new NDKNip07Signer();
+		ndk.signer = signer;
+		zapRequest.sign(ndk.signer).then(() => {
+			fetchJson
+				.get(`${callback}?amount=${amount * 1000}&nostr=${JSON.stringify(zapRequest.rawEvent())}`)
+				.then((x) => {
+					resolve(x);
+				});
+		});
+	});
 }

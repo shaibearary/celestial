@@ -41,7 +41,6 @@ You can preview the production build with `npm run preview`.
 >
 > src/lib/stores/status.ts
 
-
 ## Problems:
 
 [ ] status reload for all routers

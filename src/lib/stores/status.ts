@@ -2,7 +2,7 @@
 import type { Kind } from 'nostr-tools';
 import { get } from 'svelte/store';
 import { writable } from 'svelte/store';
-import  ndkStore  from '$lib/stores/ndk';
+import ndkStore from '$lib/stores/ndk';
 import type { NDKFilter } from '@nostr-dev-kit/ndk';
 import type { AccountInfo } from '$lib/classes/user';
 import type { RocketInfo } from '$lib/classes/rocket';
@@ -1518,9 +1518,9 @@ const initalRootIds = new Map<string, string>([
 	['ProblemRoot', '6439b9ff8c19b537ba5cdb7a7809f2031eb34c033229117ecfe055f608ff8842'],
 	['ignition_account', '546b4d7f86fe2c1fcc7eb10bf96c2eaef1daa26c67dad348ff0e9c853ffe8882']
 ]);
-const ndk = get(ndkStore)
+const ndk = get(ndkStore);
 type Database = Record<string, NDKEvent>;
-export const db : Database = await beginListeningForReplies();
+export const db: Database = await beginListeningForReplies();
 export const status = await beginListeningForEvents();
 const statusStore = writable(status);
 export default statusStore;
@@ -1533,22 +1533,23 @@ async function beginListeningForEvents() {
 			kinds: [statusKind],
 			['#e']: [initalRootIds.get('IgnitionEvent') as string]
 		};
-		
+
 		const a = await ndk.fetchEvents(filter);
-		let status = a.values().next().value.content;
-		statusResult = JSON.parse(status);
-		console.log('success123')
+		const sortedAllEvents = Array.from(a).sort((a, b) => b.created_at - a.created_at);
+		let status = sortedAllEvents[0];
+		statusResult = JSON.parse(status.content);
+		console.log('success123', Object.keys(statusResult), status.id);
 	} catch (e) {
 		statusResult = statusfake;
-		console.log('fail123')
+		console.log('fail123');
 	}
-    // console.log(statusResult)
+	// console.log(statusResult)
 
 	return statusResult;
 }
 
 async function beginListeningForReplies() {
-    let  db : Database = {};
+	let db: Database = {};
 	let statusResult;
 	try {
 		const statusKind = 1 as Kind;
@@ -1557,12 +1558,12 @@ async function beginListeningForReplies() {
 			['#e']: [initalRootIds.get('IgnitionEvent') as string]
 		};
 		const a = await ndk.fetchEvents(filter);
-        for (const ev of a )  {
-           db[ev.id] = ev
-        }
-		console.log('success')
+		for (const ev of a) {
+			db[ev.id] = ev;
+		}
+		console.log('success');
 	} catch (e) {
-		console.log('fail',e)
+		console.log('fail', e);
 	}
 	return db;
 }

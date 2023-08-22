@@ -11,7 +11,7 @@
 	import status from '$lib/stores/status';
 	import type { MeritInfo } from '$lib/classes/merit';
 	import { getIdentityByAccount } from '$lib/utils/helpers';
-	
+
 	export let rocketInfo: RocketInfo;
 	const rocketId = rocketInfo.RocketUID;
 	const creator = rocketInfo.CreatedBy;
@@ -20,7 +20,6 @@
 	const realMerits = new Map(Object.entries(meritsStatus));
 	// $: merits = $status.merits?.get(rocketId) as MeritInfo
 	$: merits = realMerits.get(rocketId) as MeritInfo;
-
 </script>
 
 <div class="new_mirv" id="041b8698b3b7206feca17c89f3f861c31d82dc2fdf3f1d0f25c3bddfa68c64e2">

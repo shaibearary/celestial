@@ -9,6 +9,7 @@
 	import Rocket from '$lib/components/Rocket.svelte';
 	import type { RocketInfo } from '$lib/classes/rocket';
 	// import List from '$lib/classes/list';
+	// console.log($status.merits,"?rockets")
 	let rockets = $status.rockets as Map<string, RocketInfo>;
 	console.log(Object.keys(rockets));
 	//

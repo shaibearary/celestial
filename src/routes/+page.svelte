@@ -5,7 +5,7 @@
 	// import { zapInvoiceFromEvent } from '@nostr-dev-kit/ndk';
 	// import ndk from '$lib/stores/ndk';
 	// // import List from '$lib/classes/list';
-	import { status } from "$lib/stores/status";
+	import { status } from '$lib/stores/status';
 
 	// export let data: PageData;
 	// console.log(data,"》《");
@@ -16,10 +16,5 @@
 
 <svelte:head>
 	<title>xxx</title>
-	<meta
-		name="description"
-		content="A Nostrocket client"
-	/>
+	<meta name="description" content="A Nostrocket client" />
 </svelte:head>
-
-
