@@ -19,4 +19,4 @@ export class Database extends Dexie {
 	}
 }
 
-export const db = new Database();
+// export const db = new Database();

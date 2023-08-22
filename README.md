@@ -40,3 +40,10 @@ You can preview the production build with `npm run preview`.
 > ## Where to find test status event?
 >
 > src/lib/stores/status.ts
+
+
+## Problems:
+
+[ ] status reload for all routers
+[ ] dont know how to parse product kind1 event
+[ ] didnt store kind1 reply event

@@ -1,5 +1,4 @@
 import { browser } from '$app/environment';
-import { db } from '$lib/interfaces/db';
 import type { NDKUser } from '@nostr-dev-kit/ndk';
 import { liveQuery, type Observable } from 'dexie';
 import { unixTimeNow } from '$lib/utils/helpers';

@@ -3,12 +3,9 @@ import NDK from '@nostr-dev-kit/ndk';
 
 export const ndk = new NDK({
 	explicitRelayUrls: [
-		// 'ws://localhost:8080'
 		'wss://nostr.688.org',
-		// 'wss://purplepag.es',
-		// 'wss://relay.nostr.band',
+
 		'wss://nos.lol',
-		// 'wss://relay.snort.social',
 		'wss://relay.damus.io'
 	]
 });
