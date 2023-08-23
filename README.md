@@ -44,5 +44,6 @@ You can preview the production build with `npm run preview`.
 ## Problems:
 
 [ ] status reload for all routers
-[ ] dont know how to parse product kind1 event
+[x] dont know how to parse product kind1 event (just markdown)
 [ ] didnt store kind1 reply event
+[ ] no place to store the global pub key
