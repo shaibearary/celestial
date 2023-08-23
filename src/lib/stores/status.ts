@@ -7,13 +7,14 @@ import type { NDKFilter } from '@nostr-dev-kit/ndk';
 import type { AccountInfo } from '$lib/classes/user';
 import type { RocketInfo } from '$lib/classes/rocket';
 import type { NDKEvent } from '@nostr-dev-kit/ndk';
+import type { ProblemInfo } from '$lib/classes/problem';
 // import {AccountInfo} from "$lib/classes/user";
 interface Status {
 	// Define the expected properties and their types here
 	// For example:
 	identity: Record<string, AccountInfo> | null;
 	shares: number | null;
-	problems: Map<string, string> | null;
+	problems: Map<string, ProblemInfo> | null;
 	merits: Map<string, string> | null;
 	rockets: Map<string, RocketInfo> | null;
 	// ...
