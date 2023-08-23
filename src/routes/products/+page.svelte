@@ -14,7 +14,7 @@
 
 	console.log(rockets);
 </script>
-
+<div></div>>=
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 	<!-- {#key personData} -->
 	{#each Object.values(rockets) as rocket}
@@ -22,3 +22,4 @@
 	{/each}
 	<!-- {/key} -->
 </div>
+
