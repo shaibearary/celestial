@@ -1546,7 +1546,7 @@ async function beginListeningForEvents() {
 	}
 	// console.log(statusResult)
 
-	return statusResult;
+	return statusResult as Status;
 }
 
 async function beginListeningForReplies() {

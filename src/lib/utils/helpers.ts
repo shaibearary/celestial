@@ -1,7 +1,7 @@
 import { status } from '$lib/stores/status';
 import { NDKEvent, NDKNip07Signer } from '@nostr-dev-kit/ndk';
 import { nip19 } from 'nostr-tools';
-import { fetchJson } from 'fetch-json';
+// import { fetchJson } from 'fetch-json';
 import ndkStore from '$lib/stores/ndk';
 import { get } from 'svelte/store';
 

@@ -9,34 +9,50 @@
 	import type { RocketInfo } from '$lib/classes/rocket';
 	import PersonCard from '$lib/components/PersonCard.svelte';
 	import type { AccountInfo } from '$lib/classes/user';
+	import { currentUser } from '$lib/stores/currentUser';
+	import type { ProblemInfo } from '$lib/classes/problem';
+	import { get } from 'svelte/store';
 	// import List from '$lib/classes/list';
 
 	export let data: PageData;
 	let selected: string;
-	let problems;
-	Object.values($status.problems).forEach((m) => {
-		if (m.ClaimedBy === window.spaceman.pubkey && m.Closed === true) {
-			found++;
-			problems.appendChild(
-				makeLinkWithOnclick(m.Title, () => {
-					document.getElementById('problem input').value = m.UID;
-				})
-			);
-			problems.appendChild(document.createElement('br'));
+	let problemsSolvedByUser: ProblemInfo[] = [];
+	let p = Object.entries($status.problems)
+
+	p.forEach((m, k) => {
+
+		if (m[1].ClaimedBy === "" && m[1].Closed === true) {
+			// if (m.ClaimedBy === $currentUser && m.Closed === true) {
+			problemsSolvedByUser.push(m[1]);
+			console.log(m,"sdsd")
 		}
 	});
 	let rockets = $status.rockets as Map<string, RocketInfo>;
 	console.log(Object.keys(rockets));
 
 	const rocketIDs: string[] = Object.keys(rockets);
+	let relatedRocketName = '';
+
+	function handleProblemClick(event) {
+		//automatically select the correct rocket
+		let relatedRocketUID = $status.problems[event.target.id].Rocket;
+		relatedRocketName = $status.rockets[relatedRocketUID].RocketName
+
+	}
 </script>
 
 <div class="new_mirv">
 	<h3 class="is-3">Let's fkn go!</h3>
 	<div><p>Request Merits</p></div>
 	<div class="field">
-		<label class="label">Rocket ID</label>
-		<Select options={rocketIDs} display_func={(o) => rockets[o].RocketName} bind:value={selected} />
+		<label class="label">Problems you solved</label>
+		{#each problemsSolvedByUser as problem, i}
+		
+		<div id = {problem.UID} on:click={handleProblemClick}>{problem.Title}</div>
+		{/each}
+		
+		<div id="choice1" >{relatedRocketName}</div>
+		
 		<!-- {JSON.stringify(selected, null, 2)}
 {(console.log(selected),'')} -->
 	</div>

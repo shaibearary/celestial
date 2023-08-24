@@ -18,9 +18,7 @@
 <div />
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
 	{#each Object.values(rockets) as rocket}
 		<ProductsForRocket rocketInfo={rocket} />
 	{/each}
-
 </div>
