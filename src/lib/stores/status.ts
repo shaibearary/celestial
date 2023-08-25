@@ -12,7 +12,7 @@ import type { ProblemInfo } from '$lib/classes/problem';
 interface Status {
 	// Define the expected properties and their types here
 	// For example:
-	identity: Record<string, AccountInfo> | null;
+	identity: Record<string, AccountInfo> ;
 	shares: number | null;
 	problems: Map<string, ProblemInfo> | null;
 	merits: Map<string, string> | null;
@@ -1522,7 +1522,8 @@ const initalRootIds = new Map<string, string>([
 const ndk = get(ndkStore);
 type Database = Record<string, NDKEvent>;
 export const db: Database = await beginListeningForReplies();
-export const status = await beginListeningForEvents();
+export const status = await beginListeningForEvents();4
+
 const statusStore = writable(status);
 export default statusStore;
 

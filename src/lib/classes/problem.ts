@@ -10,3 +10,8 @@ export interface ProblemInfo {
 	Rocket: string;
 	Tags: Record<string, unknown>; // Update the type if you know the structure of Tags object
 }
+export interface NestedProblem {
+	problem: ProblemInfo;
+	subProblems: NestedProblem[];
+
+}

@@ -8,17 +8,22 @@
 	import type { AccountInfo } from '$lib/classes/user';
 	import Rocket from '$lib/components/Rocket.svelte';
 	import type { RocketInfo } from '$lib/classes/rocket';
-	import ProductsForRocket from '$lib/components/ProductsForRocket.svelte';
-	// import List from '$lib/classes/list';
-	let rockets = $status.rockets as Map<string, RocketInfo>;
+	import type { ProblemInfo } from '$lib/classes/problem';
+	import { getNestedProblems } from '$lib/utils/helpers';
+	import NestedProblem from '$lib/components/NestedProblem.svelte';
+	let problems = $status.problems as Map<string, ProblemInfo>;
+	let allproblems = Array.from(Object.values(problems));
+	let allNestedProblems = getNestedProblems(allproblems,null,0);
+	// console.log(allproblems)
 
-	console.log(rockets);
 </script>
 
-<div />
-
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-	{#each Object.values(rockets) as rocket}
-		<ProductsForRocket rocketInfo={rocket} />
+	<!-- {#key personData} -->
+	{#each allNestedProblems as problemTree}
+		{console.log(problemTree.problem.Title)}
+		<NestedProblem nestedProblem={problemTree} />
 	{/each}
+	<!-- {/key} -->
 </div>
+

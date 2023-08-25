@@ -11,7 +11,7 @@
 	// import List from '$lib/classes/list';
 	// console.log($status.merits,"?rockets")
 	let rockets = $status.rockets as Map<string, RocketInfo>;
-	console.log(Object.keys(rockets));
+	console.log(typeof rockets);
 	//
 
 	// const jsonObject: Record<string, RocketInfo> = JSON.parse(rockets);

@@ -4,6 +4,7 @@ import { nip19 } from 'nostr-tools';
 // import { fetchJson } from 'fetch-json';
 import ndkStore from '$lib/stores/ndk';
 import { get } from 'svelte/store';
+import type { NestedProblem, ProblemInfo } from '$lib/classes/problem';
 
 export function unixTimeNow() {
 	return Math.floor(new Date().getTime() / 1000);
@@ -74,3 +75,81 @@ export async function PayForProduct(lud06, pubkey, amount, callback, productID) 
 		});
 	});
 }
+
+function findEventInNestedProblem(eventId: string,
+    threadedEvents: NestedProblem): NestedProblem |undefined
+    {
+        if (eventId === threadedEvents.problem.UID) {
+            return threadedEvents
+        }
+        for (const reply of threadedEvents.subProblems) {
+            if (reply.problem.UID === eventId) {
+                return reply
+            } else{
+                if (reply.subProblems.length > 0) {
+                    const ev = findEventInNestedProblem(eventId,reply)
+                    return ev
+                }
+            }
+
+        }
+    return undefined
+}
+
+function addNode(
+    e: ProblemInfo,
+    threadedEvents: NestedProblem,
+    ):NestedProblem | null{
+        const parentId = e.Parent
+        const parent = findEventInNestedProblem(parentId,threadedEvents)
+        if (parent!==undefined){
+            parent.subProblems.push({problem:e,subProblems:[]})
+            
+        }
+        else{
+            // console.log(e,'parent not found')
+            return null
+            
+        }
+
+        return threadedEvents
+}
+export function getNestedProblems(
+	problems: ProblemInfo[],
+nestedProblems: NestedProblem[] |null,
+iteration = 0
+){
+	if (iteration > 20) {
+		return nestedProblems as NestedProblem[];
+	}
+	const allProblemIds = problems.map((item) => item.UID);
+	if (nestedProblems === null) {
+		nestedProblems = [];
+		problems.forEach((e, idx) => {
+			if (!!allProblemIds.includes(e.Parent)) {
+				const problem = problems.splice(idx, 1)[0];
+				nestedProblems?.push({
+					problem: problem,
+					subProblems: []
+				} as NestedProblem);
+			}
+		});
+	} else {
+		problems.forEach((e, idx) => {
+			for (const nestProblem of nestedProblems) {
+				const err = addNode(e,nestProblem)
+				if (err!==null){
+					const problem = problems.splice(idx, 1)[0];
+					break
+				}
+				}
+			});
+	}
+
+	// If there are still items, do it again
+	if (problems.length > 0) {
+		return getNestedProblems(problems, nestedProblems, iteration + 1);
+	}
+	return nestedProblems;
+}
+

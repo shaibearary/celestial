@@ -12,7 +12,7 @@
 	// import List from '$lib/classes/list';
 	let rockets = $status.rockets as Map<string, RocketInfo>;
 
-	console.log(rockets);
+	// console.log(rockets);
 </script>
 
 <div />
