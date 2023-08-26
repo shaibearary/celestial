@@ -13,5 +13,4 @@ export interface ProblemInfo {
 export interface NestedProblem {
 	problem: ProblemInfo;
 	subProblems: NestedProblem[];
-
 }

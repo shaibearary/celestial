@@ -6,6 +6,7 @@
 	// import ndk from '$lib/stores/ndk';
 	// // import List from '$lib/classes/list';
 	import { status } from '$lib/stores/status';
+	import '../app.css';
 
 	import { currentUser } from '$lib/stores/currentUser';
 	import ndk from '$lib/stores/ndk';

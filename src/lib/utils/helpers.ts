@@ -76,57 +76,53 @@ export async function PayForProduct(lud06, pubkey, amount, callback, productID) 
 	});
 }
 
-function findEventInNestedProblem(eventId: string,
-    threadedEvents: NestedProblem): NestedProblem |undefined
-    {
-        if (eventId === threadedEvents.problem.UID) {
-            return threadedEvents
-        }
-        for (const reply of threadedEvents.subProblems) {
-            if (reply.problem.UID === eventId) {
-                return reply
-            } else{
-                if (reply.subProblems.length > 0) {
-                    const ev = findEventInNestedProblem(eventId,reply)
-                    return ev
-                }
-            }
-
-        }
-    return undefined
+function findEventInNestedProblem(
+	eventId: string,
+	threadedEvents: NestedProblem
+): NestedProblem | undefined {
+	if (eventId === threadedEvents.problem.UID) {
+		return threadedEvents;
+	}
+	for (const reply of threadedEvents.subProblems) {
+		if (reply.problem.UID === eventId) {
+			return reply;
+		} else {
+			if (reply.subProblems.length > 0) {
+				const ev = findEventInNestedProblem(eventId, reply);
+				return ev;
+			}
+		}
+	}
+	return undefined;
 }
 
-function addNode(
-    e: ProblemInfo,
-    threadedEvents: NestedProblem,
-    ):NestedProblem | null{
-        const parentId = e.Parent
-        const parent = findEventInNestedProblem(parentId,threadedEvents)
-        if (parent!==undefined){
-            parent.subProblems.push({problem:e,subProblems:[]})
-            
-        }
-        else{
-            // console.log(e,'parent not found')
-            return null
-            
-        }
+function addNode(e: ProblemInfo, threadedEvents: NestedProblem): NestedProblem | null {
+	const parentId = e.Parent;
+	const parent = findEventInNestedProblem(parentId, threadedEvents);
+	if (parent !== undefined) {
+		parent.subProblems.push({ problem: e, subProblems: [] });
+	} else {
+		// console.log(e,'parent not found')
+		return null;
+	}
 
-        return threadedEvents
+	return threadedEvents;
 }
 export function getNestedProblems(
 	problems: ProblemInfo[],
-nestedProblems: NestedProblem[] |null,
-iteration = 0
-){
+	nestedProblems: NestedProblem[],
+	iteration = 0
+) {
 	if (iteration > 20) {
 		return nestedProblems as NestedProblem[];
 	}
 	const allProblemIds = problems.map((item) => item.UID);
-	if (nestedProblems === null) {
-		nestedProblems = [];
+
+	if (nestedProblems.length === 0) {
+		// nestedProblems = [];
 		problems.forEach((e, idx) => {
-			if (!!allProblemIds.includes(e.Parent)) {
+			if (!allProblemIds.includes(e.Parent)) {
+				console.log('?');
 				const problem = problems.splice(idx, 1)[0];
 				nestedProblems?.push({
 					problem: problem,
@@ -137,13 +133,13 @@ iteration = 0
 	} else {
 		problems.forEach((e, idx) => {
 			for (const nestProblem of nestedProblems) {
-				const err = addNode(e,nestProblem)
-				if (err!==null){
+				const err = addNode(e, nestProblem);
+				if (err !== null) {
 					const problem = problems.splice(idx, 1)[0];
-					break
+					break;
 				}
-				}
-			});
+			}
+		});
 	}
 
 	// If there are still items, do it again
@@ -152,4 +148,3 @@ iteration = 0
 	}
 	return nestedProblems;
 }
-

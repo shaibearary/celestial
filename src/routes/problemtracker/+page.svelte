@@ -13,17 +13,14 @@
 	import NestedProblem from '$lib/components/NestedProblem.svelte';
 	let problems = $status.problems as Map<string, ProblemInfo>;
 	let allproblems = Array.from(Object.values(problems));
-	let allNestedProblems = getNestedProblems(allproblems,null,0);
-	// console.log(allproblems)
-
+	let allNestedProblems = getNestedProblems(allproblems, []);
+	console.log(allproblems.length, 'probelmwithgoodformat');
 </script>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 	<!-- {#key personData} -->
 	{#each allNestedProblems as problemTree}
-		{console.log(problemTree.problem.Title)}
 		<NestedProblem nestedProblem={problemTree} />
 	{/each}
 	<!-- {/key} -->
 </div>
-

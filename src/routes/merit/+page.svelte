@@ -17,14 +17,13 @@
 	export let data: PageData;
 	let selected: string;
 	let problemsSolvedByUser: ProblemInfo[] = [];
-	let p = Object.entries($status.problems)
+	let p = Object.entries($status.problems);
 
 	p.forEach((m, k) => {
-
-		if (m[1].ClaimedBy === "" && m[1].Closed === true) {
+		if (m[1].ClaimedBy === '' && m[1].Closed === true) {
 			// if (m.ClaimedBy === $currentUser && m.Closed === true) {
 			problemsSolvedByUser.push(m[1]);
-			console.log(m,"sdsd")
+			console.log(m, 'sdsd');
 		}
 	});
 	let rockets = $status.rockets as Map<string, RocketInfo>;
@@ -36,8 +35,7 @@
 	function handleProblemClick(event) {
 		//automatically select the correct rocket
 		let relatedRocketUID = $status.problems[event.target.id].Rocket;
-		relatedRocketName = $status.rockets[relatedRocketUID].RocketName
-
+		relatedRocketName = $status.rockets[relatedRocketUID].RocketName;
 	}
 </script>
 
@@ -47,12 +45,11 @@
 	<div class="field">
 		<label class="label">Problems you solved</label>
 		{#each problemsSolvedByUser as problem, i}
-		
-		<div id = {problem.UID} on:click={handleProblemClick}>{problem.Title}</div>
+			<div id={problem.UID} on:click={handleProblemClick}>{problem.Title}</div>
 		{/each}
-		
-		<div id="choice1" >{relatedRocketName}</div>
-		
+
+		<div id="choice1">{relatedRocketName}</div>
+
 		<!-- {JSON.stringify(selected, null, 2)}
 {(console.log(selected),'')} -->
 	</div>
