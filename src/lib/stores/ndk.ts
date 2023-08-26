@@ -2,7 +2,7 @@ import { writable } from 'svelte/store';
 import NDK from '@nostr-dev-kit/ndk';
 
 export const ndk = new NDK({
-	explicitRelayUrls: ['wss://nostr.688.org', 'wss://nos.lol']
+	explicitRelayUrls: ['wss://nostr.688.org']
 });
 
 ndk.connect().then(() => console.log('NDK Connected'));

@@ -1523,8 +1523,6 @@ const ndk = get(ndkStore);
 type Database = Record<string, NDKEvent>;
 export const db: Database = await beginListeningForReplies();
 export const status = await beginListeningForEvents();
-4;
-
 const statusStore = writable(status);
 export default statusStore;
 

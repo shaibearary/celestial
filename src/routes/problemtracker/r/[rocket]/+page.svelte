@@ -11,17 +11,23 @@
 	import type { ProblemInfo } from '$lib/classes/problem';
 	import { getNestedProblems } from '$lib/utils/helpers';
 	import NestedProblem from '$lib/components/NestedProblem.svelte';
-	let problems = $status.problems as Map<string, ProblemInfo>;
+	import { P } from 'flowbite-svelte';
+	export let data 
 	
+	
+	let problems = $status.problems as Map<string, ProblemInfo>;
 	let allproblems = Array.from(Object.values(problems));
-	const b = JSON.parse(JSON.stringify(allproblems))
-	let allNestedProblems = getNestedProblems(allproblems, []);
+	// let allNestedProblems = getNestedProblems(allproblems, []);
 
+	const a = data.problemsInRocket
+	const b = JSON.parse(JSON.stringify(a))
+	console.log(b.length)
+	let anested = getNestedProblems(a, [])
 </script>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 	<!-- {#key personData} -->
-	{#each allNestedProblems as problemTree}
+	{#each anested as problemTree}
 	<NestedProblem nestedProblem={problemTree}  selectedProblem={b}/>
 	{/each}
 	<!-- {/key} -->

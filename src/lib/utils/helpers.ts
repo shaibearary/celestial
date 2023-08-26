@@ -113,7 +113,11 @@ export function getNestedProblems(
 	nestedProblems: NestedProblem[],
 	iteration = 0
 ) {
-	if (iteration > 20) {
+	console.log(iteration,"er",problems.length)
+	if (iteration > 1000) {
+		return nestedProblems as NestedProblem[];
+	}
+	if (problems.length ==0) {
 		return nestedProblems as NestedProblem[];
 	}
 	const allProblemIds = problems.map((item) => item.UID);
@@ -122,7 +126,7 @@ export function getNestedProblems(
 		// nestedProblems = [];
 		problems.forEach((e, idx) => {
 			if (!allProblemIds.includes(e.Parent)) {
-				console.log('?');
+				console.log(idx);
 				const problem = problems.splice(idx, 1)[0];
 				nestedProblems?.push({
 					problem: problem,
@@ -146,5 +150,6 @@ export function getNestedProblems(
 	if (problems.length > 0) {
 		return getNestedProblems(problems, nestedProblems, iteration + 1);
 	}
+	
 	return nestedProblems;
 }
