@@ -12,7 +12,7 @@
     let selectedProblemUID = selectedProblem.map((problem) => {
         return problem.UID
     })
-    console.log(selectedProblem.length,'difj')
+    // console.log(selectedProblem.length,'difj')
 
 </script>
 <style>
@@ -27,7 +27,7 @@
 }
     </style>
 {#if selectedProblemUID.includes(nestedProblem.problem.UID)}
-{console.log('xxx')}
+<!-- {console.log('xxx')} -->
 <div class="problembox">
 	<div class="flex flex-row gap-4 items-center">
  
@@ -41,7 +41,7 @@
 </div>
 {:else}
 <div >
-    {console.log(nestedProblem.problem.Title)}
+    <!-- {console.log(nestedProblem.problem.Title)} -->
 	<div class="flex flex-row gap-4 items-center">
  
 		<!-- <SvelteMarkdown source={nestedProblem.problem.Title} /> -->

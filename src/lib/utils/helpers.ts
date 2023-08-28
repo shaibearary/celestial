@@ -102,7 +102,7 @@ function addNode(e: ProblemInfo, threadedEvents: NestedProblem): NestedProblem |
 	if (parent !== undefined) {
 		parent.subProblems.push({ problem: e, subProblems: [] });
 	} else {
-		// console.log(e,'parent not found')
+		// console.log(e.Title,'parent not found')
 		return null;
 	}
 
@@ -114,7 +114,8 @@ export function getNestedProblems(
 	iteration = 0
 ) {
 	console.log(iteration,"er",problems.length)
-	if (iteration > 1000) {
+
+	if (iteration > 50) {
 		return nestedProblems as NestedProblem[];
 	}
 	if (problems.length ==0) {
@@ -126,7 +127,7 @@ export function getNestedProblems(
 		// nestedProblems = [];
 		problems.forEach((e, idx) => {
 			if (!allProblemIds.includes(e.Parent)) {
-				console.log(idx);
+				console.log(idx,"??????????????????????????????????????????????????");
 				const problem = problems.splice(idx, 1)[0];
 				nestedProblems?.push({
 					problem: problem,
@@ -140,8 +141,9 @@ export function getNestedProblems(
 				const err = addNode(e, nestProblem);
 				if (err !== null) {
 					const problem = problems.splice(idx, 1)[0];
-					break;
+					continue
 				}
+
 			}
 		});
 	}
